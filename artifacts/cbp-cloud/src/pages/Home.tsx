@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Rocket, Shield, Zap, Globe, HardDrive, LineChart, 
@@ -24,6 +24,226 @@ const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
+
+const sharedPlans = [
+  {
+    name: "Starter",
+    desc: "Perfect for side projects and MVPs.",
+    price: "₹1999",
+    highlight: false,
+    badge: null,
+    specs: [
+      { label: "vCPU", value: "Shared (~1)" },
+      { label: "RAM", value: "2 GB" },
+      { label: "Disk", value: "20 GB" },
+      { label: "Apps", value: "1–2" },
+    ],
+    features: ["Free SSL", "Shared Database", "Auto Deploy"],
+    cta: "Start with Starter",
+  },
+  {
+    name: "Builder",
+    desc: "For growing teams shipping faster.",
+    price: "₹3499",
+    highlight: true,
+    badge: "MOST POPULAR",
+    specs: [
+      { label: "vCPU", value: "Shared (~2)" },
+      { label: "RAM", value: "4 GB" },
+      { label: "Disk", value: "40 GB" },
+      { label: "Apps", value: "3–5" },
+    ],
+    features: ["Free SSL", "Shared Database", "Daily Backups"],
+    cta: "Start with Builder",
+  },
+  {
+    name: "Growth",
+    desc: "For scaling startups and active apps.",
+    price: "₹5999",
+    highlight: false,
+    badge: null,
+    specs: [
+      { label: "vCPU", value: "2 Dedicated" },
+      { label: "RAM", value: "8 GB" },
+      { label: "Disk", value: "80 GB" },
+      { label: "Apps", value: "5–10" },
+    ],
+    features: ["Free SSL", "Dedicated Database", "Daily Backups"],
+    cta: "Start with Growth",
+  },
+];
+
+const vpsPlans = [
+  {
+    name: "VPS Basic",
+    desc: "Entry VPS for solo founders and APIs.",
+    price: "₹2499",
+    highlight: false,
+    badge: null,
+    specs: [
+      { label: "vCPU", value: "2" },
+      { label: "RAM", value: "4 GB" },
+      { label: "Disk", value: "80 GB" },
+    ],
+    features: ["Full Root Access", "Free SSL", "Priority Network"],
+    cta: "Get VPS Basic",
+  },
+  {
+    name: "VPS Standard",
+    desc: "More power for production workloads.",
+    price: "₹3999",
+    highlight: false,
+    badge: null,
+    specs: [
+      { label: "vCPU", value: "4" },
+      { label: "RAM", value: "8 GB" },
+      { label: "Disk", value: "100 GB" },
+    ],
+    features: ["Full Root Access", "Free SSL", "Daily Backups"],
+    cta: "Get VPS Standard",
+  },
+  {
+    name: "VPS Pro",
+    desc: "High-traffic apps and SaaS platforms.",
+    price: "₹6999",
+    highlight: true,
+    badge: "BEST VALUE",
+    specs: [
+      { label: "vCPU", value: "8" },
+      { label: "RAM", value: "16 GB" },
+      { label: "Disk", value: "150 GB" },
+    ],
+    features: ["Full Root Access", "Free SSL", "Daily Backups", "Priority Support"],
+    cta: "Get VPS Pro",
+  },
+  {
+    name: "VPS Elite",
+    desc: "Enterprise-grade isolation and raw power.",
+    price: "₹11999",
+    highlight: false,
+    badge: null,
+    specs: [
+      { label: "vCPU", value: "16" },
+      { label: "RAM", value: "32 GB" },
+      { label: "Disk", value: "200 GB" },
+    ],
+    features: ["Full Root Access", "Free SSL", "Daily Backups", "Dedicated Support"],
+    cta: "Contact Sales",
+  },
+];
+
+function PlanCard({ plan, index }: { plan: typeof sharedPlans[0]; index: number }) {
+  return (
+    <motion.div
+      variants={{
+        hidden: { opacity: 0, y: 30 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.4, delay: index * 0.1 } },
+      }}
+      className={`rounded-3xl flex flex-col relative ${
+        plan.highlight
+          ? "border-2 border-primary bg-card shadow-2xl shadow-primary/20 md:-translate-y-4"
+          : "border border-border bg-card"
+      } p-8`}
+    >
+      {plan.badge && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+          {plan.badge}
+        </div>
+      )}
+      <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
+      <p className="text-muted-foreground text-sm mb-6">{plan.desc}</p>
+      <div className="mb-6">
+        <span className="text-4xl font-bold">{plan.price}</span>
+        <span className="text-muted-foreground">/month</span>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2 mb-6 bg-accent/50 rounded-xl p-4">
+        {plan.specs.map((s) => (
+          <div key={s.label} className="flex flex-col">
+            <span className="text-xs text-muted-foreground uppercase tracking-wider">{s.label}</span>
+            <span className="font-semibold text-sm">{s.value}</span>
+          </div>
+        ))}
+      </div>
+
+      <ul className="space-y-3 mb-8 flex-grow">
+        {plan.features.map((f) => (
+          <li key={f} className="flex gap-3 text-sm">
+            <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+            {f}
+          </li>
+        ))}
+      </ul>
+      <Button
+        data-testid={`btn-plan-${plan.name.toLowerCase().replace(/\s/g, "-")}`}
+        className={`w-full ${plan.highlight ? "bg-primary hover:bg-primary/90" : ""}`}
+        variant={plan.highlight ? "default" : "outline"}
+      >
+        {plan.cta}
+      </Button>
+    </motion.div>
+  );
+}
+
+function PricingSection() {
+  const [tab, setTab] = useState<"shared" | "vps">("shared");
+  const plans = tab === "shared" ? sharedPlans : vpsPlans;
+
+  return (
+    <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="text-center max-w-3xl mx-auto mb-10">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
+        <p className="text-muted-foreground text-lg">No surprise bills. Choose the power you need, upgrade anytime.</p>
+      </div>
+
+      {/* Tab switcher */}
+      <div className="flex justify-center mb-12">
+        <div className="inline-flex bg-accent border border-border rounded-2xl p-1 gap-1" data-testid="pricing-tab-switcher">
+          <button
+            data-testid="tab-shared"
+            onClick={() => setTab("shared")}
+            className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+              tab === "shared"
+                ? "bg-primary text-primary-foreground shadow-lg"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Shared Hosting
+          </button>
+          <button
+            data-testid="tab-vps"
+            onClick={() => setTab("vps")}
+            className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+              tab === "vps"
+                ? "bg-primary text-primary-foreground shadow-lg"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            VPS Hosting
+          </button>
+        </div>
+      </div>
+
+      <motion.div
+        key={tab}
+        className={`grid gap-8 ${
+          tab === "shared" ? "md:grid-cols-3 max-w-5xl" : "md:grid-cols-2 lg:grid-cols-4 max-w-6xl"
+        } mx-auto`}
+        variants={staggerContainer}
+        initial="hidden"
+        animate="show"
+      >
+        {plans.map((plan, i) => (
+          <PlanCard key={plan.name} plan={plan} index={i} />
+        ))}
+      </motion.div>
+
+      <p className="text-center text-muted-foreground text-sm mt-10">
+        All plans include India-hosted infrastructure, free SSL, and auto-deploy from Git.
+      </p>
+    </section>
+  );
+}
 
 export default function Home() {
   return (
@@ -281,68 +501,7 @@ export default function Home() {
         </section>
 
         {/* Pricing */}
-        <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
-            <p className="text-muted-foreground text-lg">No surprise bills. Choose the power you need, upgrade anytime.</p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {/* Starter */}
-            <div className="rounded-3xl border border-border bg-card p-8 flex flex-col">
-              <h3 className="text-xl font-bold mb-2">Starter</h3>
-              <p className="text-muted-foreground text-sm mb-6">Perfect for side projects and MVPs.</p>
-              <div className="mb-6">
-                <span className="text-4xl font-bold">₹1999</span>
-                <span className="text-muted-foreground">/month</span>
-              </div>
-              <ul className="space-y-4 mb-8 flex-grow">
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> 2GB RAM Shared</li>
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> 1–2 Apps</li>
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> Free SSL</li>
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> Shared DB</li>
-              </ul>
-              <Button className="w-full" variant="outline">Start with Starter</Button>
-            </div>
-            
-            {/* Growth */}
-            <div className="rounded-3xl border-2 border-primary bg-card p-8 flex flex-col relative transform md:-translate-y-4 shadow-2xl shadow-primary/20">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                MOST POPULAR
-              </div>
-              <h3 className="text-xl font-bold mb-2">Growth</h3>
-              <p className="text-muted-foreground text-sm mb-6">For scaling startups and active apps.</p>
-              <div className="mb-6">
-                <span className="text-4xl font-bold">₹5999</span>
-                <span className="text-muted-foreground">/month</span>
-              </div>
-              <ul className="space-y-4 mb-8 flex-grow">
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> 8GB RAM Dedicated</li>
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> 5–10 Apps</li>
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> Dedicated DB</li>
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> Daily Backups</li>
-              </ul>
-              <Button className="w-full bg-primary hover:bg-primary/90">Start with Growth</Button>
-            </div>
-            
-            {/* VPS Dedicated */}
-            <div className="rounded-3xl border border-border bg-card p-8 flex flex-col">
-              <h3 className="text-xl font-bold mb-2">VPS Dedicated</h3>
-              <p className="text-muted-foreground text-sm mb-6">Full isolation for serious traffic.</p>
-              <div className="mb-6">
-                <span className="text-4xl font-bold">₹9999</span>
-                <span className="text-muted-foreground">/month</span>
-              </div>
-              <ul className="space-y-4 mb-8 flex-grow">
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> 4–8 CPU, 8–16GB RAM</li>
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> Unlimited Apps</li>
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> Full Isolation</li>
-                <li className="flex gap-3 text-sm"><CheckCircle2 className="w-5 h-5 text-primary shrink-0"/> Priority Support</li>
-              </ul>
-              <Button className="w-full" variant="outline">Contact Sales</Button>
-            </div>
-          </div>
-        </section>
+        <PricingSection />
 
         {/* Use Cases */}
         <section className="py-24 bg-accent border-y border-border">
