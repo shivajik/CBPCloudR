@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "CBP Cloud"
+version = "1.0.0"
+id = "artifacts/cbp-cloud"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19207
+
+[services.development]
+run = "pnpm --filter @workspace/cbp-cloud run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/cbp-cloud", "run", "build" ]
+publicDir = "artifacts/cbp-cloud/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19207"
+BASE_PATH = "/"
