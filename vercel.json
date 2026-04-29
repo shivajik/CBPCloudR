@@ -1,10 +1,9 @@
 {
   "framework": null,
-  "installCommand": "corepack enable pnpm && pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm --filter @workspace/cbp-cloud run build && pnpm --filter @workspace/api-server run build",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "buildCommand": "pnpm --filter @workspace/cbp-cloud run build",
   "outputDirectory": "artifacts/cbp-cloud/dist/public",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
