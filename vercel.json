@@ -1,7 +1,7 @@
 {
   "framework": null,
-  "installCommand": "pnpm install --no-frozen-lockfile",
-  "buildCommand": "pnpm --filter @workspace/cbp-cloud run build",
+  "installCommand": "npx --yes pnpm@10 install --no-frozen-lockfile",
+  "buildCommand": "npx --yes pnpm@10 --filter @workspace/cbp-cloud run build",
   "outputDirectory": "artifacts/cbp-cloud/dist/public",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
