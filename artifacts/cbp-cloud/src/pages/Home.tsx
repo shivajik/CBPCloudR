@@ -480,20 +480,65 @@ export default function Home() {
                 </thead>
                 <tbody className="divide-y divide-border">
                   {[
-                    { feature: "India Hosting (Low Latency)", cbp: "✓", r: "✗", ren: "✗", aws: "Complex" },
-                    { feature: "Instant Git Deploy", cbp: "✓", r: "✓", ren: "✓", aws: "Complex" },
-                    { feature: "Easy Setup", cbp: "✓ (Seconds)", r: "Moderate", ren: "Moderate", aws: "✗ (Days)" },
-                    { feature: "Pricing Model", cbp: "Affordable Flat", r: "Usage-Based", ren: "Mid-Tier Flat", aws: "Expensive/Complex" },
-                    { feature: "Support", cbp: "Direct/Priority", r: "Community", ren: "Ticket", aws: "Paid Only" }
-                  ].map((row, i) => (
-                    <tr key={i} className="hover:bg-accent/50 transition-colors">
-                      <td className="p-4 font-medium">{row.feature}</td>
-                      <td className="p-4 text-primary font-bold">{row.cbp}</td>
-                      <td className="p-4 text-muted-foreground">{row.r}</td>
-                      <td className="p-4 text-muted-foreground">{row.ren}</td>
-                      <td className="p-4 text-muted-foreground">{row.aws}</td>
-                    </tr>
-                  ))}
+                    {
+                      feature: "India Hosting",
+                      cbp: { label: "Native (India)", type: "good" },
+                      r:   { label: "Limited / No region", type: "bad" },
+                      ren: { label: "Limited / No region", type: "bad" },
+                      aws: { label: "Available (India regions)", type: "partial" },
+                    },
+                    {
+                      feature: "Instant Deploy",
+                      cbp: { label: "Yes", type: "good" },
+                      r:   { label: "Yes", type: "good" },
+                      ren: { label: "Yes", type: "good" },
+                      aws: { label: "No (manual setup)", type: "bad" },
+                    },
+                    {
+                      feature: "Easy Setup",
+                      cbp: { label: "Very Easy", type: "good" },
+                      r:   { label: "Easy", type: "partial" },
+                      ren: { label: "Easy", type: "partial" },
+                      aws: { label: "Complex", type: "bad" },
+                    },
+                    {
+                      feature: "Pricing",
+                      cbp: { label: "Predictable", type: "good" },
+                      r:   { label: "Usage-based", type: "partial" },
+                      ren: { label: "Moderate", type: "partial" },
+                      aws: { label: "Complex / variable", type: "bad" },
+                    },
+                    {
+                      feature: "Support",
+                      cbp: { label: "Direct (India-based)", type: "good" },
+                      r:   { label: "Limited", type: "bad" },
+                      ren: { label: "Limited", type: "bad" },
+                      aws: { label: "Ticket-based", type: "partial" },
+                    },
+                    {
+                      feature: "No DevOps Needed",
+                      cbp: { label: "Yes", type: "good" },
+                      r:   { label: "Mostly", type: "partial" },
+                      ren: { label: "Mostly", type: "partial" },
+                      aws: { label: "No", type: "bad" },
+                    },
+                  ].map((row, i) => {
+                    const cellClass = (type: string) =>
+                      type === "good"
+                        ? "text-emerald-400 font-semibold"
+                        : type === "bad"
+                        ? "text-red-400"
+                        : "text-amber-400";
+                    return (
+                      <tr key={i} className={`hover:bg-accent/50 transition-colors ${i % 2 === 0 ? "" : "bg-accent/20"}`}>
+                        <td className="p-4 font-medium text-foreground">{row.feature}</td>
+                        <td className={`p-4 ${cellClass(row.cbp.type)}`}>{row.cbp.label}</td>
+                        <td className={`p-4 ${cellClass(row.r.type)}`}>{row.r.label}</td>
+                        <td className={`p-4 ${cellClass(row.ren.type)}`}>{row.ren.label}</td>
+                        <td className={`p-4 ${cellClass(row.aws.type)}`}>{row.aws.label}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
